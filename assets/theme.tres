@@ -1,4 +1,32 @@
-[gd_resource type="Theme" format=3 uid="uid://cw3rcnetcrxlr"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://cw3rcnetcrxlr"]
+
+[ext_resource type="FontFile" uid="uid://lqt1vksx85s2" path="res://assets/Besley-Regular.woff2" id="1_cebvx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hmnuk"]
+bg_color = Color(0.698039, 0.431373, 0.388235, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vpq5"]
+bg_color = Color(0.698039, 0.431373, 0.388235, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25mih"]
+bg_color = Color(0.396078, 0.298039, 0.309804, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [resource]
-default_font_size = 30
+default_font = ExtResource("1_cebvx")
+Button/colors/font_color = Color(0.988235, 0.968627, 1, 1)
+Button/font_sizes/font_size = 32
+Button/styles/hover = SubResource("StyleBoxFlat_hmnuk")
+Button/styles/normal = SubResource("StyleBoxFlat_6vpq5")
+Button/styles/pressed = SubResource("StyleBoxFlat_25mih")

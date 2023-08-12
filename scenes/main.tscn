@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhgkox2hy33ss"]
+[gd_scene load_steps=3 format=3 uid="uid://bhgkox2hy33ss"]
 
 [ext_resource type="Theme" uid="uid://cw3rcnetcrxlr" path="res://assets/theme.tres" id="1_ke47h"]
+[ext_resource type="Script" path="res://scripts/play_button.gd" id="2_c7oxe"]
 
 [node name="main" type="Control"]
 layout_mode = 3
@@ -11,15 +12,25 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_ke47h")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.611765, 0.701961, 0.501961, 1)
+
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
+anchor_left = 0.3
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 0.7
 anchor_bottom = 0.5
-offset_left = -4.0
-offset_right = 4.0
 offset_bottom = 8.0
 grow_horizontal = 2
 text = "Play"
+script = ExtResource("2_c7oxe")
+
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
