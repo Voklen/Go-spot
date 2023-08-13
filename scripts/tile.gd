@@ -1,6 +1,5 @@
-extends Button
+extends TextureButton
 
-var simultaneous_scene = preload("res://scenes/playing_screen.tscn").instantiate()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,4 +12,4 @@ func _process(delta):
 
 
 func _on_pressed():
-	get_tree().root.add_child(simultaneous_scene)
+	self.texture_normal = load("res://assets/images/white.svg")

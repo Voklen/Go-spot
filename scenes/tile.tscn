@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://tvqpwjakhb6b"]
+
+[ext_resource type="Texture2D" uid="uid://bfgyfmn4u42uj" path="res://assets/images/empty.svg" id="1_cfywe"]
+[ext_resource type="Script" path="res://scripts/tile.gd" id="1_il44k"]
+
+[node name="tile" type="TextureButton"]
+texture_normal = ExtResource("1_cfywe")
+script = ExtResource("1_il44k")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
