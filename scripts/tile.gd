@@ -1,12 +1,8 @@
 extends TextureButton
 
-enum TileStatus {
-  EMPTY,
-  BLACK,
-  WHITE,
-}
+const TileStatus = enums.TileStatus
 
-var tile_status = TileStatus.EMPTY
+var status = TileStatus.EMPTY
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -19,14 +15,18 @@ func _process(delta):
 
 
 func _on_pressed():
-	if tile_status != TileStatus.EMPTY:
+	if status != TileStatus.EMPTY:
 		return
 	var parent = get_parent();
 	if parent.is_black_playing:
 		self.texture_normal = load("res://assets/images/black.svg")
-		tile_status = TileStatus.BLACK
+		status = TileStatus.BLACK
 		parent.move_played()
 	else:
 		self.texture_normal = load("res://assets/images/white.svg")
-		tile_status = TileStatus.WHITE
+		status = TileStatus.WHITE
 		parent.move_played()
+
+func make_empty():
+	status = TileStatus.EMPTY
+	self.texture_normal = load("res://assets/images/empty.svg")
