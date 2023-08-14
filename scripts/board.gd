@@ -1,17 +1,17 @@
 extends GridContainer
 
-const grid_size = 9
+@export
+var grid_size = 9
 
-var tile = preload("res://scenes/tile.tscn")
+var is_black_playing = true
 
-# Called when the node enters the scene tree for the first time.
+const tile = preload("res://scenes/tile.tscn")
 func _ready():
 	self.columns = grid_size
 	for i in grid_size**2:
 		var instance = tile.instantiate()
 		add_child(instance)
 
+func move_played():
+	is_black_playing = !is_black_playing
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
