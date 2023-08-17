@@ -18,35 +18,11 @@ func _ready():
 func move_played():
 	is_black_playing = !is_black_playing
 	set_board()
-	analyse_board(board)
+	var check_captures = CheckCaptures.new(grid_size)
+	check_captures.analyse_board(board)
 
 func set_board():
 	var one_d = get_children()
 	board.resize(grid_size)
 	for i in grid_size:
 		board[i] = one_d.slice(i*grid_size, (i+1)*grid_size)
-
-func analyse_board(board: Array[Array]):
-	var checked_tiles = []
-	for y in grid_size:
-		for x in grid_size:
-			if [x, y] in checked_tiles:
-				continue
-			var this_tile = tile(x,y)
-			if this_tile.status == TileStatus.EMPTY:
-				checked_tiles.append([x,y])
-				continue
-			var surrounding_tiles = [
-				tile(x+1, y).status,
-				tile(x, y+1).status,
-				tile(x-1, y).status,
-				tile(x, y-1).status
-			]
-			if not TileStatus.EMPTY in surrounding_tiles and not this_tile.status in surrounding_tiles:
-				this_tile.make_empty()
-				continue
-
-func tile(x: int, y: int) -> TextureButton:
-	if x < 0 or x >= grid_size or y < 0 or y >= grid_size:
-		return tile_scene.instantiate()
-	return board[y][x]
