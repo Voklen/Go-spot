@@ -13,9 +13,12 @@ func analyse_board(new_board: Array[Array]):
 	board = new_board
 	var checked_statuses = generate_tile_checked_statuses()
 	var checked_tiles = []
+	var to_remove = []
 	for y in grid_size:
 		for x in grid_size:
-			remove_necessary(x, y, checked_tiles, board)
+			if should_remove(x, y, checked_tiles, board, checked_statuses):
+				to_remove.append([x,y])
+	return to_remove
 
 func generate_tile_checked_statuses() -> Array:
 	var checked_statuses = []
@@ -28,26 +31,22 @@ func generate_tile_checked_statuses() -> Array:
 	return checked_statuses
 	
 
-func remove_necessary(x, y, checked_tiles, board):
-	if [x, y] in checked_tiles:
-		return
+func should_remove(x, y, checked_tiles, board, checked_statuses) -> bool:
+	if checked_statuses[x][y]:
+		return false
 	var this_tile = tile(x,y)
-	if this_tile.status == TileStatus.EMPTY:
+	if this_tile == TileStatus.EMPTY:
 		checked_tiles.append([x,y])
-		return
+		return false
 	var surrounding_tiles = [
-		tile(x+1, y).status,
-		tile(x, y+1).status,
-		tile(x-1, y).status,
-		tile(x, y-1).status
+		tile(x+1, y),
+		tile(x, y+1),
+		tile(x-1, y),
+		tile(x, y-1)
 	]
-	if not TileStatus.EMPTY in surrounding_tiles and not this_tile.status in surrounding_tiles:
-		this_tile.make_empty()
-		return
+	if not TileStatus.EMPTY in surrounding_tiles and not this_tile in surrounding_tiles:
+		return true
+	return false
 
-func tile(x: int, y: int) -> TextureButton:
-	if x < 0 or x >= grid_size or y < 0 or y >= grid_size:
-		var instance = tile_scene.instantiate()
-		instance.status = TileStatus.WALL
-		return instance
-	return board[y][x]
+func tile(x: int, y: int) -> TileStatus:
+	return board[x+1][y+1]
