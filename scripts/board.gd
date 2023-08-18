@@ -15,15 +15,17 @@ func _ready():
 		var instance = tile_scene.instantiate()
 		add_child(instance)
 
-func move_played():
+func move_played(x: int, y: int):
 	is_black_playing = !is_black_playing
 	var board = set_board()
 	var check_captures = CheckCaptures.new(grid_size)
 	var to_remove = check_captures.analyse_board(board)
 	for coordinate in to_remove:
-		var x = coordinate[0]
-		var y = coordinate[1]
-		tile_node(x, y).make_empty()
+		var remove_x = coordinate[0]
+		var remove_y = coordinate[1]
+		if remove_x == x and remove_y == y:
+			continue
+		tile_node(remove_x, remove_y).make_empty()
 
 func set_board() -> Array:
 	# This will set up a 2D array that looks like this:

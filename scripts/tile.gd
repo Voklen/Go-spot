@@ -17,15 +17,21 @@ func _process(delta):
 func _on_pressed():
 	if status != TileStatus.EMPTY:
 		return
-	var parent = get_parent();
-	if parent.is_black_playing:
+	if get_parent().is_black_playing:
 		self.texture_normal = load("res://assets/images/black.svg")
 		status = TileStatus.BLACK
-		parent.move_played()
+		move_played()
 	else:
 		self.texture_normal = load("res://assets/images/white.svg")
 		status = TileStatus.WHITE
-		parent.move_played()
+		move_played()
+
+func move_played():
+	var parent = get_parent()
+	var index = get_index()
+	var x = index % parent.grid_size
+	var y = index / parent.grid_size
+	parent.move_played(x, y)
 
 func make_empty():
 	status = TileStatus.EMPTY
