@@ -1,20 +1,12 @@
+class_name Tile
 extends TextureButton
 
 const TileStatus = enums.TileStatus
+var parent: Board = get_parent()
 
-var status = TileStatus.EMPTY
+var status := TileStatus.EMPTY
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-
-func _on_pressed():
+func _on_pressed() -> void:
 	if status != TileStatus.EMPTY:
 		return
 	if get_parent().is_black_playing:
@@ -26,13 +18,12 @@ func _on_pressed():
 		status = TileStatus.WHITE
 		move_played()
 
-func move_played():
-	var parent = get_parent()
-	var index = get_index()
-	var x = index % parent.grid_size
-	var y = index / parent.grid_size
+func move_played() -> void:
+	var index := get_index()
+	var x := index % parent.grid_size
+	var y := index / parent.grid_size
 	parent.move_played(x, y)
 
-func make_empty():
+func make_empty() -> void:
 	status = TileStatus.EMPTY
 	self.texture_normal = load("res://assets/images/empty.svg")

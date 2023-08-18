@@ -3,15 +3,15 @@ class_name CheckCaptures
 const tile_scene = preload("res://scenes/tile.tscn")
 const TileStatus = enums.TileStatus
 
-var grid_size
-var board
+var grid_size: int
+var board: Array[Array] # Array[Array[Node]] but nested typed collections are not supported
 
-func _init(new_grid_size: int):
+func _init(new_grid_size: int) -> void:
 	grid_size = new_grid_size
 
-func analyse_board(new_board: Array[Array]):
+func analyse_board(new_board: Array[Array]) -> Array[Array]:
 	board = new_board
-	var checked_statuses = generate_tile_checked_statuses()
+	var checked_statuses := generate_tile_checked_statuses()
 	var checked_tiles = []
 	var to_remove = []
 	for y in grid_size:
@@ -20,11 +20,11 @@ func analyse_board(new_board: Array[Array]):
 				to_remove.append([x,y])
 	return to_remove
 
-func generate_tile_checked_statuses() -> Array:
-	var checked_statuses = []
+func generate_tile_checked_statuses() -> Array[Array]:
+	var checked_statuses: Array[Array] = []
 	checked_statuses.resize(grid_size)
 	for i in checked_statuses.size():
-		var row = []
+		var row: Array[bool] = []
 		row.resize(grid_size)
 		row.fill(false)
 		checked_statuses[i] = row
