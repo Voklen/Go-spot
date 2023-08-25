@@ -15,7 +15,7 @@ func analyse_board(new_board: Array[Array]) -> Array[Vector2i]:
 	var to_remove: Array[Vector2i] = []
 	for y in grid_size:
 		for x in grid_size:
-			if should_remove(x, y, board, checked_statuses):
+			if should_remove(x, y, checked_statuses):
 				to_remove.append(Vector2i(x, y))
 	return to_remove
 
@@ -30,22 +30,35 @@ func generate_tile_checked_statuses() -> Array[Array]:
 	return checked_statuses
 	
 
-func should_remove(x, y, board, checked_statuses) -> bool:
-	if checked_statuses[x][y]:
-		return false
-	var this_tile = tile(x,y)
-	if this_tile == TileStatus.EMPTY:
-		checked_statuses[x][y] = true
-		return false
-	var surrounding_tiles = [
-		tile(x+1, y),
-		tile(x, y+1),
-		tile(x-1, y),
-		tile(x, y-1)
-	]
-	if not TileStatus.EMPTY in surrounding_tiles and not this_tile in surrounding_tiles:
-		return true
-	return false
+func should_remove(origin_x: int, origin_y: int, checked_statuses) -> bool:
+	var collection: Array[Vector2i] = []
+	var origin_status := tile(origin_x, origin_y)
+	var to_check: Array[Vector2i] = [Vector2i(origin_x, origin_y)]
+	for coordinate in to_check:
+		var x := coordinate.x
+		var y := coordinate.y
+		var this_tile := tile(x,y)
+		match this_tile:
+			TileStatus.EMPTY:
+				checked_statuses[x][y] = true
+				return false
+			TileStatus.WALL:
+				continue
+			origin_status:
+				if coordinate in collection:
+					continue
+				collection.append(coordinate)
+				checked_statuses[x][y] = true
+				var surrounding_tiles = [
+					Vector2i(x+1, y),
+					Vector2i(x, y+1),
+					Vector2i(x-1, y),
+					Vector2i(x, y-1)
+				]
+				to_check.append_array(surrounding_tiles)
+			_:
+				continue
+	return true
 
 func tile(x: int, y: int) -> TileStatus:
 	return board[x+1][y+1]
