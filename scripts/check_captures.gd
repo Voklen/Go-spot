@@ -9,15 +9,14 @@ var board: Array[Array] # Array[Array[Node]] but nested typed collections are no
 func _init(new_grid_size: int) -> void:
 	grid_size = new_grid_size
 
-func analyse_board(new_board: Array[Array]) -> Array[Array]:
+func analyse_board(new_board: Array[Array]) -> Array[Vector2i]:
 	board = new_board
 	var checked_statuses := generate_tile_checked_statuses()
-	var checked_tiles = []
-	var to_remove = []
+	var to_remove: Array[Vector2i] = []
 	for y in grid_size:
 		for x in grid_size:
-			if should_remove(x, y, checked_tiles, board, checked_statuses):
-				to_remove.append([x,y])
+			if should_remove(x, y, board, checked_statuses):
+				to_remove.append(Vector2i(x, y))
 	return to_remove
 
 func generate_tile_checked_statuses() -> Array[Array]:
@@ -31,12 +30,12 @@ func generate_tile_checked_statuses() -> Array[Array]:
 	return checked_statuses
 	
 
-func should_remove(x, y, checked_tiles, board, checked_statuses) -> bool:
+func should_remove(x, y, board, checked_statuses) -> bool:
 	if checked_statuses[x][y]:
 		return false
 	var this_tile = tile(x,y)
 	if this_tile == TileStatus.EMPTY:
-		checked_tiles.append([x,y])
+		checked_statuses[x][y] = true
 		return false
 	var surrounding_tiles = [
 		tile(x+1, y),

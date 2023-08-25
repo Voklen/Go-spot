@@ -21,11 +21,9 @@ func move_played(x: int, y: int) -> void:
 	var check_captures := CheckCaptures.new(grid_size)
 	var to_remove := check_captures.analyse_board(board)
 	for coordinate in to_remove:
-		var remove_x: int = coordinate[0]
-		var remove_y: int = coordinate[1]
-		if remove_x == x and remove_y == y:
+		if coordinate.x == x and coordinate.y == y:
 			continue
-		tile_node(remove_x, remove_y).make_empty()
+		tile_node(coordinate).make_empty()
 
 func set_board() -> Array[Array]:
 	# This will set up a 2D array that looks like this:
@@ -50,8 +48,8 @@ func set_board() -> Array[Array]:
 		board[x+1][0] = TileStatus.WALL
 		board[x+1][-1] = TileStatus.WALL
 		for y in grid_size:
-			board[x+1][y+1] = tile_node(x, y).status
+			board[x+1][y+1] = tile_node(Vector2i(x, y)).status
 	return board
 
-func tile_node(x: int, y: int) -> Tile:
-	return get_child(x + y*grid_size)
+func tile_node(vec: Vector2i) -> Tile:
+	return get_child(vec.x + vec.y*grid_size)

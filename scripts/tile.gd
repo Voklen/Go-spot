@@ -2,7 +2,6 @@ class_name Tile
 extends TextureButton
 
 const TileStatus = enums.TileStatus
-var parent: Board = get_parent()
 
 var status := TileStatus.EMPTY
 
@@ -19,6 +18,7 @@ func _on_pressed() -> void:
 		move_played()
 
 func move_played() -> void:
+	var parent: Board = get_parent()
 	var index := get_index()
 	var x := index % parent.grid_size
 	var y := index / parent.grid_size
