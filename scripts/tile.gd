@@ -9,31 +9,28 @@ var status := TileStatus.EMPTY
 func _ready():
 	parent = get_parent()
 
+#TODO cleanup this function
 func _on_pressed() -> void:
 	if status != TileStatus.EMPTY:
 		return
-	var coordinate = get_coordinates()
-	var board := parent.set_board()
+	var this_tile = get_coordinates()
+	var board := parent.generate_board()
 	if parent.is_black_playing:
-		board[coordinate.x + 1][coordinate.y + 1] = TileStatus.BLACK
+		board[this_tile.x + 1][this_tile.y + 1] = TileStatus.BLACK
 	else:
-		board[coordinate.x + 1][coordinate.y + 1] = TileStatus.WHITE
+		board[this_tile.x + 1][this_tile.y + 1] = TileStatus.WHITE
 	var check_captures := CheckCaptures.new(parent.grid_size)
 	var to_remove := check_captures.analyse_board(board)
-	if coordinate in to_remove:
+	if this_tile in to_remove:
 		return
 	if parent.is_black_playing:
 		self.texture_normal = load("res://assets/images/black.svg")
 		status = TileStatus.BLACK
-		move_played()
+		parent.move_played(to_remove)
 	else:
 		self.texture_normal = load("res://assets/images/white.svg")
 		status = TileStatus.WHITE
-		move_played()
-
-func move_played() -> void:
-	var coordinate = get_coordinates()
-	parent.move_played(coordinate.x, coordinate.y)
+		parent.move_played(to_remove)
 
 func get_coordinates() -> Vector2i:
 	var index := get_index()
