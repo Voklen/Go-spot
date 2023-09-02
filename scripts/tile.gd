@@ -3,11 +3,8 @@ extends TextureButton
 
 const TileStatus = enums.TileStatus
 
-var parent: Board
+@onready var parent: Board = get_parent()
 var status := TileStatus.EMPTY
-
-func _ready():
-	parent = get_parent()
 
 #TODO cleanup this function
 func _on_pressed() -> void:
