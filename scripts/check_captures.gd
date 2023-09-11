@@ -9,14 +9,20 @@ var board: Array[Array] # Array[Array[TileStatus]] but nested typed collections 
 func _init(new_grid_size: int) -> void:
 	grid_size = new_grid_size
 
-func analyse_board(new_board: Array[Array]) -> Array[Vector2i]:
+func analyse_board(new_board: Array[Array], current_move: Vector2i) -> BoardAnalysis:
 	board = new_board
 	var checked_statuses := generate_tile_checked_statuses()
 	var to_remove: Array[Vector2i] = []
+	var current_move_area: Array[Vector2i] = []
 	for y in grid_size:
 		for x in grid_size:
-			to_remove.append_array(should_remove(x, y, checked_statuses))
-	return to_remove
+			var should_remove = should_remove(x, y, checked_statuses)
+			if current_move in should_remove:
+				current_move_area = should_remove
+			else:
+				to_remove.append_array(should_remove)
+	return BoardAnalysis.new(to_remove, current_move_area)
+
 
 func generate_tile_checked_statuses() -> Array[Array]:
 	var checked_statuses: Array[Array] = []
