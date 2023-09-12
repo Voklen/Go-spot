@@ -18,9 +18,9 @@ func _on_pressed() -> void:
 func board_analysis_for_move() -> BoardAnalysis:
 	var board := parent.generate_board()
 	if parent.is_black_playing:
-		board[coordinates.x + 1][coordinates.y + 1] = TileStatus.BLACK
+		board[coordinates.x][coordinates.y] = TileStatus.BLACK
 	else:
-		board[coordinates.x + 1][coordinates.y + 1] = TileStatus.WHITE
+		board[coordinates.x][coordinates.y] = TileStatus.WHITE
 	var check_captures := CheckCaptures.new(parent.grid_size)
 	return check_captures.analyse_board(board, coordinates)
 

@@ -32,18 +32,12 @@ func generate_board() -> Array[Array]:
 	# # = wall
 	# - = empty
 	var board: Array[Array] = []
-	board.resize(grid_size + 2)
-	for row in [0, -1]:
-		board[row] = []
-		board[row].resize(grid_size + 2)
-		board[row].fill(TileStatus.WALL)
+	board.resize(grid_size)
 	
 	for x in grid_size:
-		board[x+1].resize(grid_size + 2)
-		board[x+1][0] = TileStatus.WALL
-		board[x+1][-1] = TileStatus.WALL
+		board[x].resize(grid_size)
 		for y in grid_size:
-			board[x+1][y+1] = tile_node(Vector2i(x, y)).status
+			board[x][y] = tile_node(Vector2i(x, y)).status
 	return board
 
 func tile_node(vec: Vector2i) -> Tile:

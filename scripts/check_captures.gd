@@ -70,4 +70,6 @@ func should_remove(origin_x: int, origin_y: int, checked_statuses: Array[Array])
 	return collection
 
 func tile(x: int, y: int) -> TileStatus:
-	return board[x+1][y+1]
+	if 0 > x or x >= grid_size or y < 0 or y >= grid_size:
+		return TileStatus.WALL
+	return board[x][y]
