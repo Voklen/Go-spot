@@ -10,19 +10,11 @@ var status := TileStatus.EMPTY
 func _on_pressed() -> void:
 	if status != TileStatus.EMPTY:
 		return
-	var analysis := board_analysis_for_move()
+	var analysis := parent.check_captures.analyse_move(coordinates)
 	if is_valid_move(analysis):
 		set_status_and_texture()
+		parent.check_captures.make_move(coordinates)
 		parent.move_played(analysis.to_remove)
-
-func board_analysis_for_move() -> BoardAnalysis:
-	var board := parent.generate_board()
-	if parent.is_black_playing:
-		board[coordinates.x][coordinates.y] = TileStatus.BLACK
-	else:
-		board[coordinates.x][coordinates.y] = TileStatus.WHITE
-	var check_captures := CheckCaptures.new(parent.grid_size)
-	return check_captures.analyse_board(board, coordinates)
 
 ## Checks if a stone will be removed as soon as it is placed
 func is_valid_move(analysis: BoardAnalysis) -> bool:
@@ -38,7 +30,7 @@ func is_valid_move(analysis: BoardAnalysis) -> bool:
 	return true
 
 func set_status_and_texture() -> void:
-	if parent.is_black_playing:
+	if Globals.is_black_playing:
 		self.texture_normal = load("res://assets/images/black.svg")
 		status = TileStatus.BLACK
 	else:

@@ -1,16 +1,43 @@
+extends Node
 class_name CheckCaptures
 
 const tile_scene = preload("res://scenes/tile.tscn")
 const TileStatus = enums.TileStatus
 
 var grid_size: int
-var board: Array[Array] # Array[Array[TileStatus]] but nested typed collections are not supported
+var board: Array[Array]
 
 func _init(new_grid_size: int) -> void:
 	grid_size = new_grid_size
+	board = generate_board()
 
-func analyse_board(new_board: Array[Array], current_move: Vector2i) -> BoardAnalysis:
-	board = new_board
+## Returns an Array[Array[TileStatus]] but nested typed collections are not yet supported
+func generate_board() -> Array[Array]:
+	var empty_board: Array[Array] = []
+	empty_board.resize(grid_size)
+	
+	for x in grid_size:
+		empty_board[x].resize(grid_size)
+		for y in grid_size:
+			empty_board[x][y] = TileStatus.EMPTY
+	return empty_board
+
+func analyse_move(current_move: Vector2i) -> BoardAnalysis:
+	make_move(current_move)
+	var result := analyse_board(current_move)
+	reset_move(current_move)
+	return result
+
+func make_move(move: Vector2i) -> void:
+	if Globals.is_black_playing:
+		board[move.x][move.y] = TileStatus.BLACK
+	else:
+		board[move.x][move.y] = TileStatus.WHITE
+
+func reset_move(move: Vector2i) -> void:
+	board[move.x][move.y] = TileStatus.EMPTY
+
+func analyse_board(current_move: Vector2i) -> BoardAnalysis:
 	var checked_statuses := generate_tile_checked_statuses()
 	var to_remove: Array[Vector2i] = []
 	var current_move_area: Array[Vector2i] = []
@@ -23,7 +50,6 @@ func analyse_board(new_board: Array[Array], current_move: Vector2i) -> BoardAnal
 				to_remove.append_array(should_remove)
 	return BoardAnalysis.new(to_remove, current_move_area)
 
-
 func generate_tile_checked_statuses() -> Array[Array]:
 	var checked_statuses: Array[Array] = []
 	checked_statuses.resize(grid_size)
@@ -33,7 +59,6 @@ func generate_tile_checked_statuses() -> Array[Array]:
 		row.fill(false)
 		checked_statuses[i] = row
 	return checked_statuses
-	
 
 func should_remove(origin_x: int, origin_y: int, checked_statuses: Array[Array]) -> Array[Vector2i]:
 	if checked_statuses[origin_x][origin_y]:
