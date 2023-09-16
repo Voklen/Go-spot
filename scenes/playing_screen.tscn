@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bfvadtstuspfn"]
+[gd_scene load_steps=5 format=3 uid="uid://bfvadtstuspfn"]
 
 [ext_resource type="Script" path="res://scripts/board.gd" id="1_3daqr"]
+[ext_resource type="Theme" uid="uid://cw3rcnetcrxlr" path="res://assets/theme.tres" id="1_33q3u"]
 [ext_resource type="Texture2D" uid="uid://ogfiettqy51b" path="res://assets/images/9x9board.jpg" id="2_qgn3b"]
+[ext_resource type="Script" path="res://scripts/buttons/Pass.gd" id="3_thxfi"]
 
 [node name="playing_screen" type="Control"]
 layout_mode = 3
@@ -10,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_33q3u")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -43,3 +46,18 @@ grow_vertical = 2
 scale = Vector2(0.7, 0.7)
 columns = 9
 script = ExtResource("1_3daqr")
+
+[node name="Pass" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.727
+anchor_right = 0.7
+anchor_bottom = 0.75
+offset_bottom = 8.0
+grow_horizontal = 2
+text = "Pass
+"
+script = ExtResource("3_thxfi")
+
+[connection signal="pressed" from="Pass" to="Pass" method="_on_pressed"]
