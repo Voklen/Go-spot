@@ -43,7 +43,7 @@ func analyse_board(current_move: Vector2i) -> BoardAnalysis:
 	var current_move_area: Array[Vector2i] = []
 	for y in grid_size:
 		for x in grid_size:
-			var should_remove = should_remove(x, y, checked_statuses)
+			var should_remove = get_area_to_remove(Vector2i(x, y), checked_statuses)
 			if current_move in should_remove:
 				current_move_area = should_remove
 			else:
@@ -60,12 +60,12 @@ func generate_tile_checked_statuses() -> Array[Array]:
 		checked_statuses[i] = row
 	return checked_statuses
 
-func should_remove(origin_x: int, origin_y: int, checked_statuses: Array[Array]) -> Array[Vector2i]:
-	if checked_statuses[origin_x][origin_y]:
+func get_area_to_remove(origin: Vector2i, checked_statuses: Array[Array]) -> Array[Vector2i]:
+	if checked_statuses[origin.x][origin.y]:
 		return []
 	var collection: Array[Vector2i] = []
-	var origin_status := tile(origin_x, origin_y)
-	var to_check: Array[Vector2i] = [Vector2i(origin_x, origin_y)]
+	var origin_status := tile(origin.x, origin.y)
+	var to_check: Array[Vector2i] = [origin]
 	for coordinate in to_check:
 		var x := coordinate.x
 		var y := coordinate.y
@@ -81,18 +81,20 @@ func should_remove(origin_x: int, origin_y: int, checked_statuses: Array[Array])
 					continue
 				collection.append(coordinate)
 				checked_statuses[x][y] = true
-				var surrounding_tiles := [
-					Vector2i(x+1, y),
-					Vector2i(x, y+1),
-					Vector2i(x-1, y),
-					Vector2i(x, y-1)
-				]
-				to_check.append_array(surrounding_tiles)
+				to_check.append_array(surrounding_tiles(x, y))
 			_: # If this territory is against another colour, continue on checking
 				continue
 	# If the function has not returned at this point, that means there are no empty tiles around
 	# this territory so the entire thing can be removed
 	return collection
+
+func surrounding_tiles(x, y) -> Array[Vector2i]:
+	return [
+		Vector2i(x+1, y),
+		Vector2i(x, y+1),
+		Vector2i(x-1, y),
+		Vector2i(x, y-1)
+	]
 
 func tile(x: int, y: int) -> TileStatus:
 	if 0 > x or x >= grid_size or y < 0 or y >= grid_size:
