@@ -16,9 +16,19 @@ func _ready() -> void:
 
 func move_played(to_remove: Array[Vector2i]) -> void:
 	Globals.is_black_playing = !Globals.is_black_playing
+	Globals.player_just_passed = false
 	for coordinate in to_remove:
 		tile_node(coordinate).make_empty()
 		check_captures.reset_move(coordinate)
 
 func tile_node(vec: Vector2i) -> Tile:
 	return get_child(vec.x + vec.y*grid_size)
+
+
+func end_game():
+	if check_captures.calculate_black_points() > 0:
+		print("black wins")
+	
+	if check_captures.calculate_black_points() < 0:
+		print("white wins")
+	# Popup white wins

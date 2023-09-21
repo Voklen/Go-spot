@@ -60,4 +60,5 @@ text = "Pass
 "
 script = ExtResource("3_thxfi")
 
+[connection signal="end_game" from="Pass" to="board" method="end_game"]
 [connection signal="pressed" from="Pass" to="Pass" method="_on_pressed"]

@@ -88,6 +88,58 @@ func get_area_to_remove(origin: Vector2i, checked_statuses: Array[Array]) -> Arr
 	# this territory so the entire thing can be removed
 	return collection
 
+## Positive points mean black is winning, negitive mean white is winning, 0 means it's a draw
+func calculate_black_points() -> int:
+	var checked_statuses := generate_tile_checked_statuses()
+	var black_points = 0
+	for y in grid_size:
+		for x in grid_size:
+			black_points += points_to_black(Vector2i(x, y), checked_statuses)
+	return black_points
+
+func points_to_black(origin: Vector2i, checked_statuses: Array[Array]) -> int:
+	if checked_statuses[origin.x][origin.y]:
+		return 0
+	var collection: Array[Vector2i] = []
+	var territory_owner := TileStatus.EMPTY
+	var to_check: Array[Vector2i] = [origin]
+	for coordinate in to_check:
+		var x := coordinate.x
+		var y := coordinate.y
+		var this_tile := tile(x,y)
+		match this_tile:
+			TileStatus.EMPTY: # Add any more empty squares to the collection
+				if coordinate in collection:
+					continue
+				collection.append(coordinate)
+				checked_statuses[x][y] = true
+				to_check.append_array(surrounding_tiles(x, y))
+				continue
+			TileStatus.WALL: # If this territory is against a wall, continue on checking
+				continue
+			territory_owner: # If this empty collection is against all of the same colour, keep on checking
+				checked_statuses[x][y] = true
+				continue
+			_: # If this territory is against another colour, continue on checking
+				if territory_owner == TileStatus.EMPTY:
+					territory_owner = this_tile
+				else:
+					return 0 # This means there are multiple territories touching this area, so nooene gets points
+	# If the function has not returned at this point, that means there is only one colour
+	# surrounding these empty squares, so they should get the points
+	match territory_owner: 
+		TileStatus.BLACK:
+			return len(collection)
+		TileStatus.WHITE:
+			return -len(collection)
+		TileStatus.EMPTY:
+			# No stones are on the board
+			return 0
+	# This shouldn't be possible
+	print("Got territory_owner as wall")
+	return 0
+
+
 func surrounding_tiles(x, y) -> Array[Vector2i]:
 	return [
 		Vector2i(x+1, y),
