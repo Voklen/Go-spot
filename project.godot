@@ -35,3 +35,4 @@ window/size/viewport_height=960
 [rendering]
 
 renderer/rendering_method="mobile"
+environment/defaults/default_clear_color=Color(0.611765, 0.701961, 0.501961, 1)
