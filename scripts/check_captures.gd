@@ -139,7 +139,6 @@ func points_to_black(origin: Vector2i, checked_statuses: Array[Array]) -> int:
 	print("Got territory_owner as wall")
 	return 0
 
-
 func surrounding_tiles(x, y) -> Array[Vector2i]:
 	return [
 		Vector2i(x+1, y),

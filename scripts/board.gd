@@ -1,6 +1,8 @@
 class_name Board
 extends GridContainer
 
+signal game_over_popup(text)
+
 const TileStatus = enums.TileStatus
 const tile_scene = preload("res://scenes/tile.tscn")
 @onready var check_captures := CheckCaptures.new(grid_size)
@@ -24,11 +26,11 @@ func move_played(to_remove: Array[Vector2i]) -> void:
 func tile_node(vec: Vector2i) -> Tile:
 	return get_child(vec.x + vec.y*grid_size)
 
-
 func end_game():
-	if check_captures.calculate_black_points() > 0:
-		print("black wins")
-	
-	if check_captures.calculate_black_points() < 0:
-		print("white wins")
-	# Popup white wins
+	var black_ponts = check_captures.calculate_black_points()
+	if black_ponts > 0:
+		game_over_popup.emit("Black wins")
+	elif black_ponts < 0:
+		game_over_popup.emit("White wins")
+	else:
+		game_over_popup.emit("It's a draw")
