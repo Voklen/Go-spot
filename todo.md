@@ -4,6 +4,18 @@
 
 # Later🗓️
 
+## More complex territory counting (KataGo)
+
+## AI opponents
+
+## Resignation
+
+## Show who's turn it is
+
+## Releasing button to play a move
+
+## Procedurally generated board
+
 # Done🎉
 
 ## Sacrificing captures
